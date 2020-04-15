@@ -34,6 +34,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   && echo 'deb http://deb.debian.org/debian stretch main' >> /etc/apt/sources.list \
   && echo 'deb http://apt.llvm.org/unstable/ llvm-toolchain-5.0 main' >> /etc/apt/sources.list \
   && echo 'deb http://apt.llvm.org/unstable/ llvm-toolchain-9 main' >> /etc/apt/sources.list \
+  && echo 'deb http://apt.llvm.org/unstable/ llvm-toolchain-10 main' >> /etc/apt/sources.list \
   && adduser --disabled-password --gecos '' builder && adduser builder sudo && printf 'builder\tALL=NOPASSWD: ALL\n' >> /etc/sudoers \
   && rm /tmp/* -rf
 
@@ -45,7 +46,7 @@ WORKDIR /home/builder
 FROM base AS lint
 RUN export DEBIAN_FRONTEND=noninteractive \
   && sudo apt-get -qq update && sudo apt-get install -yq --no-install-recommends \
-    clang-format-9 \
+    clang-format-10 \
     doxygen \
     bumpversion \
     codespell \
@@ -73,3 +74,6 @@ RUN install_default_compiler.sh clang 5.0
 
 FROM base AS clang-9
 RUN install_default_compiler.sh clang 9
+
+FROM base AS clang-10
+RUN install_default_compiler.sh clang 10
